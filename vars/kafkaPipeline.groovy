@@ -1,6 +1,6 @@
 def call(Map config = [:]) {
 
-    node('ubuntu-agent-label') {
+    node('ubuntu-agent') {
 
         echo "===== Kafka Shared Library Started ====="
 
