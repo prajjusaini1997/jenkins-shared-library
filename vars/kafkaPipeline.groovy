@@ -1,49 +1,33 @@
 def call(Map config = [:]) {
 
-```
-node('ubuntu-agent') {
+    node('ubuntu-agent') {
 
-    echo "===== Kafka Shared Library Started ====="
+        echo "===== Kafka Shared Library Started ====="
 
-    stage('Clone Repo') {
-        git url: config.repoUrl, branch: config.branch ?: 'main'
+        stage('Clone Repo') {
+            git url: config.repoUrl, branch: config.branch ?: 'main'
+        }
+
+        stage('Approval') {
+            input message: 'Approve Kafka Deployment?'
+        }
+
+        stage('Playbook Execution') {
+            sh '''
+                echo "Running Ansible Playbook..."
+            '''
+        }
+
+        stage('Notification') {
+            slackSend(
+                channel: '#build-status',
+                color: 'good',
+                message: "Kafka Deployment Successful - ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+            )
+
+            echo "Slack Notification Sent"
+        }
+
+        echo "===== Kafka Shared Library Completed ====="
     }
-
-    stage('Approval') {
-        input message: 'Approve Kafka Deployment?'
-    }
-
-    stage('Playbook Execution') {
-        sh '''
-            echo "Running Ansible Playbook..."
-        '''
-    }
-
-    stage('Notification') {
-
-        slackSend(
-            channel: '#build-status',
-            color: 'good',
-            message: """
-```
-
-✅ Kafka Deployment Successful
-
-Environment: PROD
-Repository: ${config.repoUrl}
-Branch: ${config.branch ?: 'main'}
-
-Build URL: ${env.BUILD_URL}
-"""
-)
-
-```
-        echo "Slack Notification Sent"
-    }
-
-    echo "===== Kafka Shared Library Completed ====="
 }
-```
-
-}
-
