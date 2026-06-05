@@ -1,6 +1,6 @@
 def call(Map config = [:]) {
 
-    node {
+    node('ubuntu-agent-label') {
 
         echo "===== Kafka Shared Library Started ====="
 
@@ -14,7 +14,7 @@ def call(Map config = [:]) {
 
         stage('Playbook Execution') {
             sh '''
-            echo "Running Ansible Playbook..."
+                echo "Running Ansible Playbook..."
             '''
         }
 
