@@ -20,7 +20,8 @@ def call(Map config = [:]) {
 
         stage('Notification') {
             slackSend(
-                channel: 'all-prajjwal',
+                channel: '#all-prajjwal',
+                tokenCredentialId: 'slack-token',
                 color: 'good',
                 message: "Kafka Deployment Successful - ${env.JOB_NAME} #${env.BUILD_NUMBER}"
             )
